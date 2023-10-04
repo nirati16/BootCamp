@@ -1,0 +1,72 @@
+create table Employee(
+    EmployeeName VARCHAR(20) NOT NULL,
+    EmployeeDOB Date NOT NULL,
+    EmployeeGender VARCHAR(10) NOT NULL,
+    EmployeeLocation VARCHAR(25) NOT NULL,
+    EmployeeContactNumber NUMERIC(10) NOT NULL
+);
+insert into Employee values ('Ram Kumar','01-jan-1990','Male','Delhi',7898528527);
+insert into Employee values ('Sunita','02-feb-1991','Female','Bangalore',9517538525);
+insert into Employee values ('Ajay','01-feb-1985','Male','Hyderabad',9638527415);
+insert into Employee values ('Nitin','05-feb-1991','Male','Chennai',8527539515);
+select * from Employee;
+
+create table D_Employee(
+    PK_Employee_Key NUMERIC NOT NULL PRIMARY KEY,
+    E_Contact_Number NUMERIC NOT NULL,
+    E_Name VARCHAR(20) NOT NULL,
+    E_DOB Date NOT NULL,
+    E_Gender VARCHAR(10) NOT NULL,
+    E_Location VARCHAR(25) NOT NULL,
+    Created_Date Date NOT NULL,
+    Updated_Date Date
+);
+insert into D_Employee values (1,7898528527,'Ram Kumar','01-jan-1990','Male','Delhi',sysdate,NULL);
+insert into D_Employee values (2,9517538525,'Sunita','02-feb-1991','Female','Bangalore',sysdate,NULL);
+insert into D_Employee values (3,9638527415,'Ajay','01-feb-1985','Male','Hyderabad',sysdate,NULL);
+insert into D_Employee values (4,8527539515,'Nitin','05-feb-1991','Male','Chennai',sysdate,NULL);
+select * from D_Employee;
+
+update Employee set EmployeeLocation='Pune' where EmployeeContactNumber=8527539515;
+update D_Employee set E_Location='Pune',Updated_Date='31-aug-2023' where PK_Employee_Key=4;
+
+create table D_Employee_SCD2(
+    PK_Employee_Key NUMERIC NOT NULL PRIMARY KEY,
+    E_Contact_Number NUMERIC NOT NULL,
+    E_Name VARCHAR(20) NOT NULL,
+    E_DOB Date NOT NULL,
+    E_Gender VARCHAR(10) NOT NULL,
+    E_Location VARCHAR(25) NOT NULL,
+    Start_Date Date NOT NULL,
+    End_Date Date,
+    Version Numeric NOT NULL,
+    Flag VARCHAR(1) NOT NULL
+);
+insert into D_Employee_SCD2 values (1,7898528527,'Ram Kumar','01-jan-1990','Male','Delhi',sysdate,NULL,1,'Y');
+insert into D_Employee_SCD2 values (2,9517538525,'Sunita','02-feb-1991','Female','Bangalore',sysdate,NULL,1,'Y');
+insert into D_Employee_SCD2 values (3,9638527415,'Ajay','01-feb-1985','Male','Hyderabad',sysdate,NULL,1,'Y');
+insert into D_Employee_SCD2 values (4,8527539515,'Nitin','05-feb-1991','Male','Chennai',sysdate,NULL,1,'Y');
+select * from D_Employee_SCD2;
+
+insert into d_employee_SCD2 values (5,7898528527,'Ram Kumar','01-jan-1990','Male','Pune',sysdate,NULL,2,'Y');
+update d_employee_SCD2 set End_Date = (select Start_Date from d_employee_SCD2 where PK_Employee_key = 5),Flag ='N' where PK_Employee_key=1;
+
+create table D_Employee_SCD3(
+    PK_Employee_Key NUMERIC NOT NULL PRIMARY KEY,
+    E_Contact_Number NUMERIC NOT NULL,
+    E_Name VARCHAR(20) NOT NULL,
+    E_DOB Date NOT NULL,
+    E_Gender VARCHAR(10) NOT NULL,
+    E_Location VARCHAR(25) NOT NULL,
+    Prev_E_Name VARCHAR(20),
+    Prev_E_DOB Date,
+    Prev_E_Gender VARCHAR(10),
+    Prev_E_Location VARCHAR(25),
+    Created_Date Date NOT NULL,
+    Updated_Date Date
+);
+insert into D_Employee_SCD3 values(1,7898528527,'Ram Kumar','01-jan-1990','Male','Pune','Ram Kumar','01-jan-1990','Male','Delhi',sysdate,'31-aug-2023');
+insert into D_Employee_SCD3 values (2,9517538525,'Sunita','02-feb-1991','Female','Bangalore',sysdate,NULL);
+insert into D_Employee_SCD3 values (3,9638527415,'Ajay','01-feb-1985','Male','Hyderabad',sysdate,NULL);
+insert into D_Employee_SCD3 values (4,8527539515,'Nitin','05-feb-1991','Male','Chennai',sysdate,NULL);
+select * from D_Employee_SCD3;
